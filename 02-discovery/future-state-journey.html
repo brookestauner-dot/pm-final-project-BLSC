@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Future State Journey — Real-Time Fleet Coordinator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF1EC; --paper-2:#E4E7E0; --ink:#18222C; --ink-soft:#4A5866;
+    --rule:#C9CFC6; --hivis:#DDD23F; --band:#18222C; --band-ink:#EFF1EC;
+    --stage1:#3F6376; --stage2:#3F6376; --stage3:#3F6376; --stage4:#3F6376;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141C24; --paper-2:#1C262F; --ink:#E6E9E3; --ink-soft:#A3AFB9;
+      --rule:#2E3A45; --hivis:#DDD23F; --band:#0E151B; --band-ink:#E6E9E3;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141C24; --paper-2:#1C262F; --ink:#E6E9E3; --ink-soft:#A3AFB9;
+    --rule:#2E3A45; --hivis:#DDD23F; --band:#0E151B; --band-ink:#E6E9E3;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Source Serif 4",Georgia,serif; font-size:16px; line-height:1.55;
+  }
+  h1,h2,h3,.meta,.label,.tag{font-family:"Archivo","Helvetica Neue",Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:56px 28px 80px}
+
+  .meta{font-size:12.5px;letter-spacing:.01em;color:var(--ink-soft);font-weight:500;margin:0 0 20px}
+  h1{
+    font-weight:700; font-size:clamp(1.7rem,4vw,2.3rem); line-height:1.08;
+    letter-spacing:-.02em; margin:0 0 10px; max-width:22ch;
+  }
+  .standfirst{color:var(--ink-soft);font-size:1rem;max-width:66ch;margin:0 0 40px}
+
+  /* Track */
+  .track{position:relative;margin:0 0 52px}
+  .track-line{
+    position:absolute; top:19px; left:19px; right:19px; height:2px;
+    background:var(--rule); z-index:0;
+  }
+  .stages{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+    position:relative; z-index:1;
+  }
+  .stage{display:flex;flex-direction:column}
+  .stage-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .num{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--band); color:var(--hivis);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:1rem;flex:0 0 auto;
+    border:3px solid var(--paper);
+  }
+  .stage-name{font-weight:700;font-size:1.02rem;letter-spacing:-.01em;line-height:1.2}
+
+  .card{
+    background:var(--paper-2); border-radius:2px; padding:18px 18px 16px;
+    display:flex; flex-direction:column; gap:14px; flex:1;
+    border-top:3px solid var(--stage1);
+  }
+  .field{}
+  .label{font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 3px}
+  .field p{margin:0;font-size:.93rem;line-height:1.42}
+  .ab{
+    margin:2px 0 0; padding:10px 12px; background:var(--paper);
+    border-radius:2px; font-size:.87rem; line-height:1.42;
+  }
+  .ab b{font-family:"Archivo",sans-serif;font-weight:600;font-size:.83rem}
+  .arrow{color:var(--ink-soft);font-weight:600;padding:0 2px}
+
+  /* Advantages */
+  .adv-head{
+    border-top:2px solid var(--ink); padding-top:22px; margin:8px 0 20px;
+  }
+  .adv-head h2{font-size:1.3rem;font-weight:700;letter-spacing:-.02em;margin:0 0 6px}
+  .adv-head p{color:var(--ink-soft);font-size:.95rem;margin:0;max-width:64ch}
+  .advantages{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule)}
+  .advantage{background:var(--paper);padding:20px 20px 18px}
+  .advantage .tag{
+    font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--hivis);
+    background:var(--band); display:inline-block; padding:3px 8px; border-radius:2px;
+    margin-bottom:10px;
+  }
+  .advantage h3{font-size:1.02rem;font-weight:700;margin:0 0 8px;letter-spacing:-.01em}
+  .advantage p{margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.5}
+
+  .dependency{
+    background:var(--band); color:var(--band-ink); border-radius:2px;
+    padding:20px 22px; margin:8px 0 44px;
+  }
+  .dependency .tag{
+    font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--hivis);
+    display:inline-block;margin-bottom:10px;font-family:"Archivo",sans-serif;
+  }
+  .dependency p{margin:0;font-size:.94rem;line-height:1.55;color:#CFD7DD;max-width:74ch}
+  .dependency p b{color:var(--band-ink);font-family:"Archivo",sans-serif;font-weight:600}
+
+  footer{
+    border-top:1px solid var(--rule); padding-top:16px; margin-top:44px;
+    font-size:.82rem; color:var(--ink-soft);
+  }
+  :focus-visible{outline:2px solid var(--hivis);outline-offset:3px}
+
+  @media (max-width:860px){
+    .stages{grid-template-columns:1fr}
+    .track-line{display:none}
+    .advantages{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="meta">Future State Journey — Real-Time Fleet Coordinator<br>Strategy: Reclaim operational simplicity by stripping away legacy noise</p>
+  <h1>From shadow dispatch back to one system of record.</h1>
+  <p class="standfirst">For real-time fleet coordinators, we streamline the coordination front end because significant enterprise customers will move to a competitor if the dashboard stays a system they work around instead of the system they trust.</p>
+
+  <div class="track">
+    <div class="track-line"></div>
+    <div class="stages">
+
+      <div class="stage">
+        <div class="stage-head"><div class="num">1</div><div class="stage-name">Instant Reassignment</div></div>
+        <div class="card" style="border-top-color:#3F6376">
+          <div class="field"><p class="label">User action</p><p>Dispatcher reassigns a stop directly in RouteLogic as conditions change.</p></div>
+          <div class="field"><p class="label">Internal state</p><p>Confident — no longer pre-drafting the same update for WhatsApp.</p></div>
+          <div class="field"><p class="label">Pain point addressed</p><p>Reassignments no longer require a parallel manual broadcast to reach drivers.</p></div>
+          <div class="ab"><b>Action:</b> Reassign once in-app <span class="arrow">→</span> <b>Benefit:</b> zero duplicate messaging effort</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head"><div class="num">2</div><div class="stage-name">Live Push Confirmation</div></div>
+        <div class="card" style="border-top-color:#3B6E5B">
+          <div class="field"><p class="label">User action</p><p>Dispatcher watches a push receipt confirm the driver's app updated in seconds.</p></div>
+          <div class="field"><p class="label">Internal state</p><p>Reassured — the 8–15 minute blind window is gone, so no need to chase.</p></div>
+          <div class="field"><p class="label">Pain point addressed</p><p>Eliminates the lag and silence that forced drivers onto stale routes.</p></div>
+          <div class="ab"><b>Action:</b> Push notifies driver instantly <span class="arrow">→</span> <b>Benefit:</b> no wrong-direction driving</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head"><div class="num">3</div><div class="stage-name">Trusted Live Board</div></div>
+        <div class="card" style="border-top-color:#8A6A2F">
+          <div class="field"><p class="label">User action</p><p>Dispatcher reads status straight off the dashboard, including on night shift.</p></div>
+          <div class="field"><p class="label">Internal state</p><p>Settled — the board reflects now, not an hour ago, so decisions feel safe.</p></div>
+          <div class="field"><p class="label">Pain point addressed</p><p>Closes the 20–60 minute status lag that made "in progress" unreliable.</p></div>
+          <div class="ab"><b>Action:</b> Status updates in real time <span class="arrow">→</span> <b>Benefit:</b> decisions made on current fact</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head"><div class="num">4</div><div class="stage-name">Retired Shadow System</div></div>
+        <div class="card" style="border-top-color:#A93A2C">
+          <div class="field"><p class="label">User action</p><p>Dispatcher closes the WhatsApp group; RouteLogic is the only channel checked.</p></div>
+          <div class="field"><p class="label">Internal state</p><p>Relieved of double duty — one source of truth, one place to work.</p></div>
+          <div class="field"><p class="label">Pain point addressed</p><p>Ends the manual sync between dashboard and messaging app entirely.</p></div>
+          <div class="ab"><b>Action:</b> Consolidate to one system <span class="arrow">→</span> <b>Benefit:</b> faster, cleaner, auditable coordination</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="dependency">
+    <span class="tag">Dependency risk</span>
+    <p><b>This journey assumes the driver's app is stable and reachable.</b> Instant reassignment and live status are dispatcher-side promises — they break down if the driver's device crashes mid-route (BUG-2031) or goes dark with no offline cache (BUG-2050). A push notification cannot reach a crashed app, and a live board cannot reflect a driver who has no connectivity. Closing the coordination gap on the dispatch side does not remove the underlying reliability gap on the driver side; the two must land together, or the dispatcher's trust in the board — the outcome this journey is built to deliver — breaks again the first time a route is lost to a crash.</p>
+  </div>
+
+  <div class="adv-head">
+    <h2>Competitive advantage over the WhatsApp workaround</h2>
+    <p>What the future state delivers that a manual, external channel structurally cannot.</p>
+  </div>
+  <div class="advantages">
+    <div class="advantage">
+      <span class="tag">Speed</span>
+      <h3>Seconds, not minutes</h3>
+      <p>Push-based reassignment closes the 8–15 minute gap that let drivers act on stale routes — a delay no amount of faster typing in WhatsApp can fix.</p>
+    </div>
+    <div class="advantage">
+      <span class="tag">Data integrity</span>
+      <h3>Structured, not retyped</h3>
+      <p>Route and status data moves natively end to end, removing the manual re-entry that introduces errors and breaks the audit trail enterprise buyers pay for.</p>
+    </div>
+    <div class="advantage">
+      <span class="tag">Trust</span>
+      <h3>One system, not two</h3>
+      <p>Dispatchers stop maintaining a shadow process, so the reporting layer enterprise accounts value is finally fed by real-time, trustworthy input.</p>
+    </div>
+  </div>
+
+  <footer>Future State Journey — mapped from current-state persona: Fleet Dispatcher, Mid-Size 3PL (also night shift). Workaround retired: WhatsApp shadow dispatch.</footer>
+
+</div>
+</body>
+</html>
