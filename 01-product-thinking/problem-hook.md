@@ -12,7 +12,7 @@ Users are being forced to a competitor.
 RouteLogic must streamline real-time fleet coordination functionality now, before complexity drives users to leaner competitors and turns our greatest strength—enterprise capability—into the reason we lose the market.
 
 ## Value proposition
-For Real time fleet coordinators, we will streamline fleet coordination front end worfklows (UI / UX) because significant enterprise customers will move to a competitor.
+For Real time fleet coordinators, we will streamline fleet coordination front end workflows (UI / UX) because significant enterprise customers will move to a competitor.
 
 ## Cold-read self-review
 Yes. Misery is systemic, not an edge case. It's a large enterprise customer we would be looking at losing so loss of revenue could be significant.
